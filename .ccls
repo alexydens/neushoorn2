@@ -1,0 +1,6 @@
+-ansi
+-Wall
+-Wextra
+-Wpedantic
+-DNH_INCLUDE_STDLIB
+-DDEBUG
