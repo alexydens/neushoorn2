@@ -35,12 +35,13 @@ void nh_arena_free(nh_arena_t *arena) {
 }
 /* Allocate size bytes on a linear allocator (if out of memory, return NULL) */
 u8 *nh_arena_alloc(nh_arena_t *arena, usize size) {
+  u8 *result;
   NH_ASSERT(arena);
   NH_ASSERT(size);
   if (arena->current + size > arena->start + arena->size) {
     return NULL;
   }
-  u8 *result = arena->current;
+  result = arena->current;
   arena->current += size;
   return result;
 }
