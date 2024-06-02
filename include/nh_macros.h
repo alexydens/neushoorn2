@@ -19,6 +19,9 @@
 #define NH_MIN(x, y)          ((x) < (y) ? (x) : (y))
 /* Get the maximum of two values */
 #define NH_MAX(x, y)          ((x) > (y) ? (x) : (y))
+/* Clamp a value between two bounds */
+#define NH_CLAMP(x, min, max) ((x) < (min) ?\
+  (min) : ((x) > (max) ? (max) : (x)))
 
 /* Swap two values */
 #define NH_SWAP(x, y)         do {\
