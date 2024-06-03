@@ -16,7 +16,7 @@
 /* Get file size (+1 for null-terminator) */
 usize nh_file_size(const char *path) {
   usize size = 0;
-  FILE *file = fopen(path, "r");
+  FILE *file = fopen(path, "rb");
   NH_ASSERT(file);
   fseek(file, 0, SEEK_END);
   size = ftell(file) + 1;
@@ -26,7 +26,7 @@ usize nh_file_size(const char *path) {
 /* Read full file into buffer (with null terminator) */
 usize nh_read_file(const char *path, u8 *buffer) {
   usize size = 0;
-  FILE *file = fopen(path, "r");
+  FILE *file = fopen(path, "rb");
   NH_ASSERT(file);
   fseek(file, 0, SEEK_END);
   size = ftell(file);
@@ -40,7 +40,7 @@ usize nh_read_file(const char *path, u8 *buffer) {
 }
 /* Write full buffer to file */
 void nh_write_file(const char *path, const u8 *buffer, usize size) {
-  FILE *file = fopen(path, "w");
+  FILE *file = fopen(path, "wb");
   NH_ASSERT(file);
   NH_ASSERT(fwrite(buffer, 1, size, file));
   fclose(file);
