@@ -16,7 +16,7 @@ typedef struct nh_str_t {
 } nh_str_t;
 
 /* Create a string view from a literal */
-nh_str_t nh_str_create(nh_arena_t *arena, const char *cstr) {
+static nh_str_t nh_str_create(nh_arena_t *arena, const char *cstr) {
   nh_str_t str;
   usize size = 0;
   char *curr = (char*)cstr;
@@ -36,7 +36,7 @@ nh_str_t nh_str_create(nh_arena_t *arena, const char *cstr) {
 }
 #ifdef NH_INCLUDE_STDLIB
 /* Create a string view with the contents of a file */
-nh_str_t nh_str_from_file(nh_arena_t *arena, const char *path) {
+static nh_str_t nh_str_from_file(nh_arena_t *arena, const char *path) {
   nh_str_t str;
   usize size = nh_file_size(path);
   str.start = nh_arena_alloc(arena, size);
@@ -45,7 +45,7 @@ nh_str_t nh_str_from_file(nh_arena_t *arena, const char *path) {
 }
 #endif
 /* Create 1 string view by copying another */
-nh_str_t nh_str_copy(nh_arena_t *arena, nh_str_t str) {
+static nh_str_t nh_str_copy(nh_arena_t *arena, nh_str_t str) {
   nh_str_t copy;
   copy.start = nh_arena_alloc(arena, str.size);
   copy.size = str.size;
@@ -55,7 +55,7 @@ nh_str_t nh_str_copy(nh_arena_t *arena, nh_str_t str) {
   return copy;
 }
 /* Concatenate 2 string views to form a new one */
-nh_str_t nh_str_cat(nh_arena_t *arena, nh_str_t str1, nh_str_t str2) {
+static nh_str_t nh_str_cat(nh_arena_t *arena, nh_str_t str1, nh_str_t str2) {
   nh_str_t str;
   str.size = str1.size + str2.size;
   str.start = nh_arena_alloc(arena, str.size);
@@ -69,7 +69,7 @@ nh_str_t nh_str_cat(nh_arena_t *arena, nh_str_t str1, nh_str_t str2) {
 }
 
 /* Check if two string views contain the same data */
-bool nh_str_eq(nh_str_t str1, nh_str_t str2) {
+static bool nh_str_eq(nh_str_t str1, nh_str_t str2) {
   if (str1.size != str2.size) {
     return false;
   }
@@ -82,7 +82,7 @@ bool nh_str_eq(nh_str_t str1, nh_str_t str2) {
 }
 
 /* Convert all characters in a string to uppercase */
-void nh_str_to_upper(nh_str_t *str) {
+static void nh_str_to_upper(nh_str_t *str) {
   for (usize i = 0; i < str->size; i++) {
     if (str->start[i] >= 'a' && str->start[i] <= 'z') {
       str->start[i] -= 'a' - 'A';
@@ -90,7 +90,7 @@ void nh_str_to_upper(nh_str_t *str) {
   }
 } 
 /* Convert all characters in a string to lowercase */
-void nh_str_to_lower(nh_str_t *str) {
+static void nh_str_to_lower(nh_str_t *str) {
   for (usize i = 0; i < str->size; i++) {
     if (str->start[i] >= 'A' && str->start[i] <= 'Z') {
       str->start[i] += 'a' - 'A';

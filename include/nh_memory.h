@@ -17,7 +17,7 @@
 
 #else
 /* Set size bytes of memory to val */
-void *nh_memset(void *ptr, u8 val, usize size) {
+static void *nh_memset(void *ptr, u8 val, usize size) {
   u8 *curr = (u8*)ptr;
   for (usize i = 0; i < size; i++) {
     curr[i] = val;
@@ -25,7 +25,7 @@ void *nh_memset(void *ptr, u8 val, usize size) {
   return ptr;
 }
 /* Copy size bytes of memory from src to dest */
-void *nh_memcpy(void *dest, const void *src, usize size) {
+static void *nh_memcpy(void *dest, const void *src, usize size) {
   u8 *curr_dest = (u8*)dest;
   const u8 *curr_src = (const u8*)src;
   for (usize i = 0; i < size; i++) {

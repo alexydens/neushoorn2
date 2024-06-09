@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 /* Get file size (+1 for null-terminator) */
-usize nh_file_size(const char *path) {
+static usize nh_file_size(const char *path) {
   usize size = 0;
   FILE *file = fopen(path, "rb");
   NH_ASSERT(file);
@@ -24,7 +24,7 @@ usize nh_file_size(const char *path) {
   return size;
 }
 /* Read full file into buffer (with null terminator) */
-usize nh_read_file(const char *path, u8 *buffer) {
+static usize nh_read_file(const char *path, u8 *buffer) {
   usize size = 0;
   FILE *file = fopen(path, "rb");
   NH_ASSERT(file);
@@ -39,14 +39,14 @@ usize nh_read_file(const char *path, u8 *buffer) {
   return size + 1;
 }
 /* Write full buffer to file */
-void nh_write_file(const char *path, const u8 *buffer, usize size) {
+static void nh_write_file(const char *path, const u8 *buffer, usize size) {
   FILE *file = fopen(path, "wb");
   NH_ASSERT(file);
   NH_ASSERT(fwrite(buffer, 1, size, file));
   fclose(file);
 }
 /* Append full buffer to file */
-void nh_append_file(const char *path, const u8 *buffer, usize size) {
+static void nh_append_file(const char *path, const u8 *buffer, usize size) {
   FILE *file = fopen(path, "a");
   NH_ASSERT(file);
   NH_ASSERT(fwrite(buffer, 1, size, file));

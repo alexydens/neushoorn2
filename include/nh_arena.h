@@ -17,7 +17,7 @@ typedef struct nh_arena_t {
  * - size: the size, in bytes, of the allocator.
  * - start: the starting address of a pre-allocated buffer for it.
  */
-nh_arena_t nh_arena_create(usize size, u8 *start) {
+static nh_arena_t nh_arena_create(usize size, u8 *start) {
   nh_arena_t arena;
   NH_ASSERT(start);
   NH_ASSERT(size);
@@ -27,14 +27,14 @@ nh_arena_t nh_arena_create(usize size, u8 *start) {
   return arena;
 }
 /* Free a linear allocator */
-void nh_arena_free(nh_arena_t *arena) {
+static void nh_arena_free(nh_arena_t *arena) {
   NH_ASSERT(arena);
   arena->start = NULL;
   arena->current = NULL;
   arena->size = 0;
 }
 /* Allocate size bytes on a linear allocator (if out of memory, return NULL) */
-u8 *nh_arena_alloc(nh_arena_t *arena, usize size) {
+static u8 *nh_arena_alloc(nh_arena_t *arena, usize size) {
   u8 *result;
   NH_ASSERT(arena);
   NH_ASSERT(size);
