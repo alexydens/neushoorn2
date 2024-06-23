@@ -5,6 +5,7 @@
 /* Project headers */
 #include "nh_base.h"
 #include "nh_arena.h"
+#include "nh_memory.h"
 #ifdef NH_INCLUDE_STDLIB
 #include "nh_fileio.h"
 #endif
@@ -33,6 +34,15 @@ static nh_str_t nh_str_create(nh_arena_t *arena, const char *cstr) {
   }
   str.start[size] = 0;
   return str;
+}
+/* Create a char * from a string view */
+static char *nh_str_to_cstr(nh_arena_t *arena, nh_str_t str) {
+  char *cstr = (char *)nh_arena_alloc(arena, str.size + 1);
+  for (usize i = 0; i < str.size; i++) {
+    cstr[i] = str.start[i];
+  }
+  cstr[str.size] = 0;
+  return cstr;
 }
 #ifdef NH_INCLUDE_STDLIB
 /* Create a string view with the contents of a file */
@@ -68,6 +78,31 @@ static nh_str_t nh_str_cat(nh_arena_t *arena, nh_str_t str1, nh_str_t str2) {
   return str;
 }
 
+/* Split a string view into multiple string views */
+static nh_str_t *nh_str_split(nh_arena_t *arena, nh_str_t str, u8 delim) {
+  usize count = 0;
+  for (usize i = 0; i < str.size; i++) {
+    if (str.start[i] == delim) {
+      count++;
+    }
+  }
+  nh_str_t *result =
+    (nh_str_t*)nh_arena_alloc(arena, sizeof(nh_str_t) * (count + 1));
+  usize count2 = 0;
+  for (usize i = 0; i < str.size; i++) {
+    if (str.start[i] == delim) {
+      result[count2].start = str.start;
+      result[count2].size = i;
+      count2++;
+      str.start += i + 1;
+      i = 0;
+    }
+  }
+  result[count2].start = str.start;
+  result[count2].size = str.size;
+  return result;
+}
+
 /* Check if two string views contain the same data */
 static bool nh_str_eq(nh_str_t str1, nh_str_t str2) {
   if (str1.size != str2.size) {
@@ -79,6 +114,19 @@ static bool nh_str_eq(nh_str_t str1, nh_str_t str2) {
     }
   }
   return true;
+}
+
+/* Check if str2 is in str1 in any position */
+static bool nh_str_in(nh_str_t str1, nh_str_t str2) {
+  for (usize i = 0; i <= str1.size - str2.size; i++) {
+    nh_str_t str;
+    str.start = str1.start + i;
+    str.size = str2.size;
+    if (nh_str_eq(str, str2)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /* Convert all characters in a string to uppercase */
